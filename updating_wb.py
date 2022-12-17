@@ -4,14 +4,6 @@ from config import Config
 from API.wb import WildberriesAPI
 
 
-def open_shelve(path, code):
-    try:
-        with shelve.open(path) as data:
-            info = data[code]
-    except:
-        info = 0
-    return info
-
 def load_products(total):
     total = math.ceil(total / 1000)
     wb_codes, barcodes, nums = [], [], []
@@ -32,8 +24,10 @@ def updating_wb(api, warehouseId):
         nmID = nums[i]
         code = codes[i]
         barcode = barcodes[i]
-        stocks = open_shelve('data/stocks', code)
-        price = open_shelve('data/prices', code)
+        with shelve.open('data/stocks') as data:
+            stocks = data.get(code, 0)
+        with shelve.open('data/prices') as data:
+            price = data.get(code, 0)
         price = int(float(price)*1.08)
 
         product_stocks = {

@@ -4,14 +4,6 @@ from config import Config
 from API.ozon import OzonAPI
 
 
-def open_shelve(path, code):
-    try:
-        with shelve.open(path) as data:
-            info = data[code]
-    except:
-        info = 0
-    return info
-
 def load_products(total, last_id):
     total = math.ceil(total / 1000)
     codes, ids = [], []
@@ -31,8 +23,10 @@ def updating_ozon(api, warehouse_id):
     for i in range(len(codes)):
         product_id = ids[i]
         offer_id = codes[i]
-        stocks = open_shelve('data/stocks', offer_id)
-        price = open_shelve('data/prices', offer_id)
+        with shelve.open('data/stocks') as data:
+            stocks = data.get(offer_id, 0)
+        with shelve.open('data/prices') as data:
+            price = data.get(offer_id, 0)
 
         product_stocks = {
             "offer_id": str(offer_id),
