@@ -3,14 +3,13 @@ import json
 
 
 class MoySkladAPI:
-    def __init__(self, api_key, id_store):
+    def __init__(self, api_key):
         self.headers = {
             "Authorization": f"Basic {api_key}"
             }
-        self.id_store = id_store
 
-    def get_stocks(self, limit, offset):
-        store = f"https://online.moysklad.ru/api/remap/1.2/entity/store/{self.id_store}"
+    def get_stocks(self, store_id, limit, offset):
+        store = f"https://online.moysklad.ru/api/remap/1.2/entity/store/{store_id}"
         endpoint = (
             "https://online.moysklad.ru/api/remap/1.2/report/stock/all?"
             "quantityMode=positiveOnly&"

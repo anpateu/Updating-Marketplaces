@@ -1,6 +1,7 @@
 import pandas as pd
 from config import Config
 
+
 class Sheet:
     def __init__(self):
         self.document_id = Config.GOOGLE_DOCUMENT_ID

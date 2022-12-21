@@ -1,10 +1,8 @@
 import shelve
 import math
-from config import Config
-from API.ozon import OzonAPI
 
 
-def load_products(total, last_id):
+def load_products(api, total, last_id):
     total = math.ceil(total / 1000)
     codes, ids = [], []
     for i in range(total):
@@ -15,17 +13,18 @@ def load_products(total, last_id):
             ids.append(element['product_id'])
     return codes, ids
 
-def updating_ozon(api, warehouse_id):
+def update_ozon(api, warehouse_id):
+    path_to_data = '..\\..\\data'
     total = api.get_products(1, "")['result']['total']
-    codes, ids = load_products(total, "")
+    codes, ids = load_products(api, total, "")
     body_stocks, body_prices = [], []
 
     for i in range(len(codes)):
         product_id = ids[i]
         offer_id = codes[i]
-        with shelve.open('data/stocks') as data:
+        with shelve.open(f'{path_to_data}\\stocks') as data:
             stocks = data.get(offer_id, 0)
-        with shelve.open('data/prices') as data:
+        with shelve.open(f'{path_to_data}\\prices') as data:
             price = data.get(offer_id, 0)
 
         product_stocks = {
@@ -51,8 +50,3 @@ def updating_ozon(api, warehouse_id):
         print('[OZ] Send prices:', api.send_prices(body_prices[i:i + 1000]))
     for i in range(0, len(body_stocks), 100):
         print('[OZ] Send stocks:', api.send_stocks(body_stocks[i:i + 100]))
-
-
-if __name__ == '__main__':
-    api = OzonAPI(client_id=Config.OZON_CLIENT_ID, api_key=Config.OZON_API_KEY)
-    updating_ozon(api, Config.OZON_WAREHOUSE_ID)

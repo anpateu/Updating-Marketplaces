@@ -11,7 +11,7 @@ class WildberriesAPI:
         endpoint = f'https://suppliers-api.wildberries.ru/api/v2/stocks?skip={skip}&take={take}'
         response = requests.get(endpoint, headers=self.headers)
         if response.status_code == 200:
-            return response.json(), response.json()['total']
+            return response.json()
 
     def send_stocks(self, stocks, warehouse):
         endpoint = f"https://suppliers-api.wildberries.ru/api/v3/stocks/{warehouse}"
