@@ -28,6 +28,10 @@
 .idea/**/shelf
 .idea
 .env
+.xslx
+.xls
+.txt
+.db
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -396,3 +400,8 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 
+/products.db
+/data/big.txt
+/matching.xlsx
+/mail/Besedy.xlsx
+/mail/НОВЫЙ ПОВОРОТ.xls

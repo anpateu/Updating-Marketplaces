@@ -1,4 +1,3 @@
-import shelve
 import math
 
 
@@ -13,8 +12,7 @@ def load_products(api, total, last_id):
             ids.append(element['product_id'])
     return codes, ids
 
-def update_ozon(api, warehouse_id):
-    path_to_data = '..\\..\\data'
+def update_ozon(api, warehouse_id, data):
     total = api.get_products(1, "")['result']['total']
     codes, ids = load_products(api, total, "")
     body_stocks, body_prices = [], []
@@ -22,10 +20,8 @@ def update_ozon(api, warehouse_id):
     for i in range(len(codes)):
         product_id = ids[i]
         offer_id = codes[i]
-        with shelve.open(f'{path_to_data}\\stocks') as data:
-            stocks = data.get(offer_id, 0)
-        with shelve.open(f'{path_to_data}\\prices') as data:
-            price = data.get(offer_id, 0)
+        stocks = data['stocks'].get(offer_id, 0)
+        price = data['prices'].get(offer_id, 0)
 
         product_stocks = {
             "offer_id": str(offer_id),
